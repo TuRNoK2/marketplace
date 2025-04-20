@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="text-center">
+    <h1 class="mb-4">Добро пожаловать в Marketplace!</h1>
+    <p class="lead">Здесь вы можете найти интересные товары или разместить свои.</p>
+    <a href="{% url 'product_list' %}" class="btn btn-primary mt-3">Перейти к товарам</a>
+  </div>
+</div>
+{% endblock %}
