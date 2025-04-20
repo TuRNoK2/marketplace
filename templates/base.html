@@ -14,5 +14,9 @@
 
     {% include 'partials/footer.html' %}
     <script src="{% static 'js/main.js' %}"></script>
+
+    {% if user.is_authenticated %}
+        <a href="{% url 'password_change' %}">Сменить пароль</a>
+    {% endif %}
 </body>
 </html>
