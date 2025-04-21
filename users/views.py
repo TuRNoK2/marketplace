@@ -2,10 +2,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, update_session_auth_hash
-from .forms import RegisterForm, LoginForm
 
-
-
+from products.models import Product
+from .forms import RegisterForm, LoginForm, ProfileEditForm
 
 
 # регистрация \ логин \ выход
@@ -53,3 +52,27 @@ def custom_password_change_view(request):
     return render(request, 'registration/password_change.html', {'form': form})
 
 # конец
+
+
+
+@login_required
+def profile_view(request):
+    user = request.user
+    products = Product.objects.filter(seller=user)
+    return render(request, 'users/profile.html', {'products': products})
+
+
+
+
+@login_required
+def edit_profile(request):
+    user = request.user
+    if request.method == 'POST':
+        form = ProfileEditForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ProfileEditForm(instance=user)
+
+    return render(request, 'users/edit_profile.html', {'form': form})

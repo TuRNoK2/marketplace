@@ -5,7 +5,7 @@
     <ul style="list-style: none; display: flex; gap: 20px; margin: 0;">
       {% if user.is_authenticated %}
         <li><a href="{% url 'logout' %}">Выйти</a></li>
-        <li><a href="#">Профиль</a></li>
+        <li><a href="{% url 'profile' %}">Профиль</a></li>
       {% else %}
         <li><a href="{% url 'login' %}">Вход</a></li>
         <li><a href="{% url 'register' %}">Регистрация</a></li>

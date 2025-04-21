@@ -15,7 +15,8 @@ def home(request):
 
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import ProductForm
+from .forms import ProductForm, ProductEditForm
+
 
 @login_required
 def create_product(request):
@@ -44,3 +45,15 @@ def my_products(request):
 def product_detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
     return render(request, 'products/product_detail.html', {'product': product})
+
+@login_required
+def edit_product(request, pk):
+    product = get_object_or_404(Product, pk=pk, seller=request.user)  # Только свои товары
+    if request.method == 'POST':
+        form = ProductEditForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect('my_products')
+    else:
+        form = ProductEditForm(instance=product)
+    return render(request, 'products/edit_product.html', {'form': form})

@@ -8,6 +8,9 @@
         {% for product in products %}
             <li>
                 <a href="{% url 'product_detail' product.id %}">{{ product.name }}</a>
+                <span>{{ product.price }} $</span>
+                <a href="{% url 'edit_product' product.pk %}">Редактировать</a>
+
             </li>
         {% empty %}
             <p>У вас пока нет товаров.</p>
