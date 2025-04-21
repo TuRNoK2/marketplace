@@ -1,10 +1,37 @@
 {% extends 'base.html' %}
+{% load static %}
+
 
 {% block title %}Список товаров{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-  <h2 class="mb-4">Товары</h2>
-  <p>Пока здесь пусто, но скоро будут товары!</p>
+  <h2 class="mb-4 text-center">Товары</h2>
+
+  {% if products %}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      {% for product in products %}
+      <div class="col">
+        <div class="card h-100">
+          {% if product.image %}
+            <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+          {% else %}
+            <img src="{% static 'img/default-product.jpg' %}" class="card-img-top" alt="{{ product.name }}">
+          {% endif %}
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">{{ product.description|truncatechars:100 }}</p>
+            <p class="card-text"><strong>Цена:</strong> {{ product.price }} ₽</p>
+          </div>
+          <div class="card-footer text-center">
+            <a href="#" class="btn btn-primary">Купить</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>Пока нет товаров.</p>
+  {% endif %}
 </div>
 {% endblock %}
