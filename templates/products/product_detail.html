@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}{{ product.name }} - Детали{% endblock %}
 
 {% block content %}
@@ -8,11 +8,11 @@
 
     <div class="row">
         <div class="col-md-6">
-            <!-- Изображение товара -->
-            {% if product.image %}
-                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="img-fluid">
-            {% else %}
-                <p>Изображение не доступно.</p>
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                  {% else %}
+                    <img src="{% static 'img/default-product.jpg' %}" class="card-img-top" alt="Нет изображения">
+
             {% endif %}
         </div>
 

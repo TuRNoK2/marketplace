@@ -9,9 +9,18 @@ from .models import Product
 from django.shortcuts import render
 from .models import Product
 
+from django.core.paginator import Paginator
+from django.shortcuts import render
+from .models import Product
+
 def product_list(request):
-    products = Product.objects.all()
-    return render(request, 'products/product_list.html', {'products': products})
+    product_list = Product.objects.all().order_by('-id')
+    paginator = Paginator(product_list, 6)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'products/product_list.html', {'page_obj': page_obj})
 
 def home(request):
     return render(request, 'home.html')

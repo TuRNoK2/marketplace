@@ -1,4 +1,4 @@
-
+{% load static %}
 <header style="background-color: #f5f5f5; padding: 15px 30px;">
   <nav style="display: flex; justify-content: space-between; align-items: center;">
     <h2><a href="{% url 'home' %}" style="text-decoration: none; color: black;">Marketplace</a></h2>
@@ -6,6 +6,13 @@
       {% if user.is_authenticated %}
         <li><a href="{% url 'logout' %}">Выйти</a></li>
         <li><a href="{% url 'profile' %}">Профиль</a></li>
+        <div class="col-md-4 text-center">
+      {% if user.photo %}
+        <img src="{{ user.photo.url }}" class="img-thumbnail mb-3" style="max-height: 200px;">
+      {% else %}
+        <img src="{% static 'images/default-user.png' %}" class="img-thumbnail mb-3" style="max-height: 200px;">
+      {% endif %}
+    </div>
       {% else %}
         <li><a href="{% url 'login' %}">Вход</a></li>
         <li><a href="{% url 'register' %}">Регистрация</a></li>

@@ -16,7 +16,6 @@
         <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-lg">Выйти</a>
       {% else %}
         <a href="{% url 'product_list' %}" class="btn btn-success btn-lg">Перейти к товарам</a>
-        <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-lg">Выйти</a>
       {% endif %}
     {% else %}
       <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg">Войти</a>
