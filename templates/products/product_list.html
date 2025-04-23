@@ -1,57 +1,47 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Список товаров{% endblock %}
 
 {% block content %}
-  <div class="container">
-    <h2 class="mb-4">Все товары</h2>
+<div class="container">
+  <h2 class="mb-4">Все товары</h2>
 
-    {% if page_obj %}
-      <div class="row">
-        {% for product in page_obj %}
-          <div class="col-md-4 mb-4">
-            <div class="card h-100">
-              {% if product.image %}
-                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-              {% else %}
-                <img src="{% static 'img/default-product.jpg' %}" class="card-img-top" alt="Нет изображения">
-              {% endif %}
-              <div class="card-body">
-                <h5 class="card-title">{{ product.name }}</h5>
-                <p class="card-text">{{ product.description|truncatewords:20 }}</p>
-                <p class="card-text"><strong>{{ product.price }} $.</strong></p>
+  {% if page_obj %}
+    <div class="row">
+      {% for product in page_obj %}
+        <div class="col-md-4 mb-4">
+          <div class="card h-100">
+            {% if product.image and product.image.url %}
+              <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+            {% else %}
+              <img src="{% static 'img/no-image.png' %}" class="card-img-top" alt="Нет изображения">
+            {% endif %}
+            <div class="card-body">
+              <h5 class="card-title">{{ product.name }}</h5>
+              <p class="card-text">{{ product.description|truncatewords:20 }}</p>
+              <p class="card-text"><strong>{{ product.price }} $.</strong></p>
+
+              <div class="d-flex justify-content-between">
                 <a href="{% url 'product_detail' product.pk %}" class="btn btn-primary">Посмотреть</a>
+                <button onclick="cart.addItem({
+                  id: '{{ product.id }}',
+                  name: '{{ product.name|escapejs }}',
+                  price: {{ product.price }},
+                  image: '{% if product.image and product.image.url %}{{ product.image.url }}{% endif %}'
+                })" class="btn btn-success">
+                  <i class="bi bi-cart-plus"></i> В корзину
+                </button>
               </div>
             </div>
           </div>
-        {% endfor %}
-      </div>
+        </div>
+      {% endfor %}
+    </div>
 
-      <!-- пагинация -->
-      <nav aria-label="Навигация по страницам">
-        <ul class="pagination justify-content-center">
-          {% if page_obj.has_previous %}
-            <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Назад</a>
-            </li>
-          {% endif %}
+    <!-- пагинация -->
+    {% include 'pagination.html' %}
 
-          {% for page_num in page_obj.paginator.page_range %}
-            <li class="page-item {% if page_obj.number == page_num %}active{% endif %}">
-              <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
-            </li>
-          {% endfor %}
-
-          {% if page_obj.has_next %}
-            <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.next_page_number }}">Вперёд</a>
-            </li>
-          {% endif %}
-        </ul>
-      </nav>
-
-    {% else %}
-      <p>Товары не найдены.</p>
-    {% endif %}
-  </div>
+  {% else %}
+    <p>Товары не найдены.</p>
+  {% endif %}
+</div>
 {% endblock %}

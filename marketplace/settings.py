@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'users',
-    'products'
+    'products',
+
 ]
 
 MIDDLEWARE = [
@@ -151,3 +152,13 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'aart5482@gmail.com'
+EMAIL_HOST_PASSWORD = 'hsod jiqo amvl zdjd'
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+DOMAIN = '127.0.0.1:8000'

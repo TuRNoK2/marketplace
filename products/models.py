@@ -1,3 +1,5 @@
+from django.conf import settings
+
 from users import models
 from users.models import CustomUser
 
@@ -27,3 +29,4 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+

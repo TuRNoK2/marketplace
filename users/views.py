@@ -1,10 +1,19 @@
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.tokens import default_token_generator
+from django.core.mail import send_mail
+from django.http import HttpRequest, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, update_session_auth_hash
+from django.urls import reverse
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+from pyexpat.errors import messages
 
 from products.models import Product
 from .forms import RegisterForm, LoginForm, ProfileEditForm
+from .models import CustomUser
 
 
 # регистрация \ логин \ выход
@@ -76,3 +85,27 @@ def edit_profile(request):
         form = ProfileEditForm(instance=user)
 
     return render(request, 'users/edit_profile.html', {'form': form})
+
+
+
+
+@login_required
+def send_confirmation_email(request):
+    try:
+        # Простая отправка письма без токена подтверждения
+        send_mail(
+            'Подтверждение регистрации',
+            f'Спасибо за регистрацию, {request.user.username}!\n\n'
+            f'Ваш аккаунт на {settings.SITE_NAME} успешно создан.\n'
+            f'Email: {request.user.email}',
+            settings.DEFAULT_FROM_EMAIL,
+            [request.user.email],
+            fail_silently=False,
+        )
+        request.user.email_confirmed = True
+        request.user.save()
+        messages.success(request, 'Письмо отправлено на вашу почту')
+    except Exception as e:
+        messages.error(request, f'Ошибка отправки: {str(e)}')
+
+    return redirect('profile')

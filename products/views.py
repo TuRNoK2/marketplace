@@ -1,9 +1,8 @@
-from django.http import HttpResponseForbidden
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
-from .models import Product
 
 
 from django.shortcuts import render
@@ -70,3 +69,10 @@ def edit_product(request, pk):
     else:
         form = ProductEditForm(instance=product)
     return render(request, 'products/edit_product.html', {'form': form})
+
+
+
+
+
+def cart_view(request):
+    return render(request, 'cart/cart.html')
