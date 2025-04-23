@@ -1,11 +1,14 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden, JsonResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
 
 
 from django.shortcuts import render
+
+from .forms import ProductForm, ProductEditForm
 from .models import Product
 
 from django.core.paginator import Paginator
@@ -25,9 +28,6 @@ def home(request):
     return render(request, 'home.html')
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from .forms import ProductForm, ProductEditForm
 
 
 @login_required

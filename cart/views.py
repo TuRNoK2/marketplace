@@ -34,3 +34,9 @@ def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, pk=item_id, cart__user=request.user)
     cart_item.delete()
     return redirect('cart_view')
+
+@login_required
+def checkout_view(request):
+    # cart, created = Cart.objects.get_or_create(user=request.user)
+    # cart.items.all().delete()
+    return render(request, 'cart/checkout.html')

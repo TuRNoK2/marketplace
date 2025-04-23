@@ -9,8 +9,9 @@ from django.contrib.auth import login, logout, update_session_auth_hash
 from django.urls import reverse
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
-from pyexpat.errors import messages
+from django.contrib import messages
 
+from marketplace.settings import DOMAIN
 from products.models import Product
 from .forms import RegisterForm, LoginForm, ProfileEditForm
 from .models import CustomUser
@@ -91,21 +92,20 @@ def edit_profile(request):
 
 @login_required
 def send_confirmation_email(request):
+    user = request.user
     try:
-        # Простая отправка письма без токена подтверждения
+        subject = 'Приветствие и подтверждение'
+        message = f'Здравствуйте, {user.username}!\n\nСпасибо за регистрацию!'
+
         send_mail(
-            'Подтверждение регистрации',
-            f'Спасибо за регистрацию, {request.user.username}!\n\n'
-            f'Ваш аккаунт на {settings.SITE_NAME} успешно создан.\n'
-            f'Email: {request.user.email}',
+            subject,
+            message,
             settings.DEFAULT_FROM_EMAIL,
-            [request.user.email],
+            [user.email],
             fail_silently=False,
         )
-        request.user.email_confirmed = True
-        request.user.save()
-        messages.success(request, 'Письмо отправлено на вашу почту')
+        messages.success(request, 'Приветственное письмо отправлено на вашу почту.')
     except Exception as e:
-        messages.error(request, f'Ошибка отправки: {str(e)}')
+        messages.error(request, f'Ошибка отправки письма: {str(e)}')
+    return redirect('/users/profile/')
 
-    return redirect('profile')
